@@ -1,8 +1,5 @@
 # DiscordBotBase
 
-GlitchでDiscordBotを作るためのベースです。
-
-
-## 詳細
-
-[誰でも作れる！Discord Bot（基礎編）](https://note.com/exteoi/n/nf1c37cb26c41)をお読みください。
+JavaScriptでDiscordBotを作るためのベースです。
+[ExtEOi/DiscordBotBase](https://github.com/ExtEOi/DiscordBotBase)からフォークし、
+discord.js13で動作するように書き換えました。
