@@ -1,5 +1,4 @@
 const http = require('http');
-const querystring = require('querystring');
 const { Client } = require('discord.js');
 const { Intents } = require('./intents.json');
 
@@ -16,9 +15,10 @@ http.createServer((req, res) =>{
         res.end('No post data');
         return;
       }
-      var dataObject = querystring.parse(data);
-      console.log('post:' + dataObject.type);
-      if(dataObject.type == 'wake'){
+      var searchParams = new URLSearchParams(data);
+      var dataType = searchParams.get('type');
+      console.log('post:' + dataType);
+      if(dataType == 'wake'){
         console.log('Woke up in post');
         res.end();
         return;
