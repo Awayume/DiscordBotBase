@@ -4,6 +4,7 @@ const { Client } = require('discord.js');
 const { Intents } = require('./intents.json');
 
 const client = new Client({ intents: Intents.DEFAULT, partials: [ 'MESSAGE', 'CHANNEL' ] });
+const prefix = config.prefix;
 
 if (config.postWakeEnable){
   postServer.run();
@@ -23,11 +24,20 @@ client.on('messageCreate', async message =>{
   // message.guildやmessage.channelなどが空の場合があるので注意
   messageReceiveLog(message);
   if (message.author.bot) return;
+  if (message.content.startsWith(prefix)){
+    // BOTのコマンド(スラッシュコマンドではありません)
+    const args = message.content.slice(prefix.length).trim().split(/ +/);
+    const command = args.shift().toLowerCase();
+    if (command === 'ping'){
+      await sendMsg(message, `Pingは${client.ws.ping}msです`);
+      return;
+    }
+  }
   if(message.mentions.has(client.user, { ignoreEveryone: true })){
     await sendReply(message, '呼びましたか？');
     return;
   }
-  if (message.content.match(/にゃ～ん|にゃーん/)){
+  else if (message.content.match(/にゃ～ん|にゃーん/)){
     await sendMsg(message, 'にゃ～ん');
     return;
   }
