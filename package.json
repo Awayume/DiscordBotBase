@@ -5,9 +5,9 @@
   "name": "Discord BOT",
   "version": "0.0.1",
   "description": "A simple Discord BOT with discord.js",
-  "main": "server.js",
+  "main": "bot.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node bot.js"
   },
   "dependencies": {
     "express": "^4.17.2",
