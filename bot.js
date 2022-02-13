@@ -1,6 +1,6 @@
 const postServer = require('./server');
 const config = require('./config.json');
-const { Client } = require('discord.js');
+const { Client, MessageEmbed } = require('discord.js');
 const { Intents } = require('./intents.json');
 
 const client = new Client({ intents: Intents.DEFAULT, partials: [ 'MESSAGE', 'CHANNEL' ] });
@@ -30,6 +30,26 @@ client.on('messageCreate', async message =>{
     const command = args.shift().toLowerCase();
     if (command === 'ping'){
       await sendMsg(message, `Pingは${client.ws.ping}msです`);
+      return;
+    }
+    else if (command === 'embed'){
+      const djsIcon = 'https://discordjs.guide/favicon.png';
+      const exampleEmbed = new MessageEmbed()
+        .setColor('#5865f2')
+        .setTitle('サンプルEmbed')
+        .setURL('https://discordjs.guide')
+        .setAuthor({ name: 'Embed', iconURL: client.user.avatarURL(), url: 'https://discord.com' })
+        .setDescription('Embedメッセージのサンプル')
+        .setThumbnail(client.user.avatarURL())
+        .addFields(
+          { name: '1つ目のフィールド', value: 'メッセージ', inline: false },
+          { name: '2つ目のフィールド', value: 'メッセージ', inline: false }
+        )
+        .addField('単体フィールド', 'メッセージ', false)
+        .setImage(djsIcon)
+        .setTimestamp()
+        .setFooter({ text: 'フッター', iconUrl: 'https://js.org/favicon.png' });
+      await sendMsg(message, { embeds: [exampleEmbed] });
       return;
     }
   }
@@ -77,30 +97,33 @@ const messageReceiveLog = message =>{
   console.groupEnd();
 }
 
-const sendReply = async (message, text, options={}) =>{
-  await message.reply(text, options)
+const messageSendLog = (type, message, args) =>{
+  if (type === 'normal'){
+    console.group('Sent a message');
+  }
+  else if (type === 'reply'){
+    console.group('Send a reply message');
+  }
+  console.table({
+    'Message': message.content,
+    'Options': JSON.stringify(args),
+    'Message ID': message.id
+  });
+  console.groupEnd();
+}
+
+const sendReply = async (message, args) =>{
+  await message.reply(args)
     .then(msg =>{
-      console.group('Sent a reply message')
-      console.table({
-        'Message': text,
-        'Options': JSON.stringify(options),
-        'Message ID': msg.id
-      });
-      console.groupEnd();
+      messageSendLog('reply', msg, args);
     })
     .catch(console.error);
 }
 
-const sendMsg = async (message, text, options={}) =>{
-  await message.channel.send(text, options)
+const sendMsg = async (message, args) =>{
+  await message.channel.send(args)
     .then(msg =>{
-      console.group('Sent a message');
-      console.table({
-        'Message': text,
-        'Options': JSON.stringify(options),
-        'Message ID': msg.id
-      });
-      console.groupEnd();
+      messageSendLog('normal', msg, args);
     })
     .catch(console.error);
 }
