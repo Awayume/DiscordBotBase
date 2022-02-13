@@ -12,8 +12,8 @@ exports.run = () =>{
           res.end('No post data');
           return;
         }
-        let searchParams = new URLSearchParams(data);
-        let dataType = searchParams.get('type');
+        const searchParams = new URLSearchParams(data);
+        const dataType = searchParams.get('type');
         console.log('post:' + dataType);
         if(dataType === 'wake'){
           console.log('Woke up in post');
