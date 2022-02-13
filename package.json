@@ -4,6 +4,7 @@
   "//3": "updating this file will download and update your packages",
   "name": "Discord BOT",
   "version": "0.0.1",
+  "private": true,
   "description": "A simple Discord BOT with discord.js",
   "main": "bot.js",
   "scripts": {
